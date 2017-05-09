@@ -1,0 +1,30 @@
+#content{
+	display: flex;
+	width: 100%;
+	justify-content: space-around;
+}
+
+.cat-div{
+	width: 50%;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	box-sizing: border-box;
+	flex-direction: row;
+}
+
+.cat-pic{
+	width: 75%;
+}
+
+.click-header{
+	width: 50%;
+	text-align: right;
+}
+
+.num-header{
+	width: 50%;
+	text-align: left;
+
+}
