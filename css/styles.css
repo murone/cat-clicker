@@ -1,11 +1,19 @@
 #content{
 	display: flex;
 	width: 100%;
-	justify-content: space-around;
+	justify-content: flex-start;
 }
-
+#header{
+	width: 100%;
+	text-align: center;
+	align-content: center;
+	justify-content: center;
+}
+.cat-list{
+	width: 25%;
+}
 .cat-div{
-	width: 50%;
+	/*width: 75%;*/
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
@@ -15,7 +23,8 @@
 }
 
 .cat-pic{
-	width: 75%;
+	width: 600px;
+	cursor: pointer;
 }
 
 .click-header{
@@ -27,4 +36,8 @@
 	width: 50%;
 	text-align: left;
 
+}
+
+.cat-item{
+	cursor: pointer;
 }
