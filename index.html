@@ -4,16 +4,35 @@
 	<title>Cat Clicker</title>
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
 	<link rel="stylesheet" type="text/css" href="css/styles.css" />
+	<script src="js/knockout-3.4.2.js"></script>
 </head>
 <body>
 	<header id=header>
 		<h1>Cat Clicker</h1>
 	</header>
 	<div id="content">
-		<div id="cat-list" class="list-group">
+		<div id="cat-list" class="list-group" data-bind="foreach: catList">
+			<a class="cat-item list-group-item" data-bind="text: name, attr: {id: $index}, click: selectCat"></a>
 		</div>
-		<div id="cat-div" class="cat-div">
+		<div id="cat-div" class="cat-div" data-bind="with: currentCat">
+			<img id="" class="cat-pic" src="" data-bind="click: incrementCounter, attr: {src:imgSrc}">
+			<h2 id="" class="click-header" data-bind="text: name"></h2><h2>&nbsp;:&nbsp;</h2><h2 id="" class="num-header" data-bind="text: clickCount"></h2>
+			<h3 id="" class="title" data-bind="text: title"></h3>
+			<div class="nicknames-div">
+				<h3>Nicknames:</h3>
+				<ul data-bind="foreach: nicknames">
+					<li data-bind="text: $data"></li>
+				</ul>
+			</div>
 		</div>
+	</div>
+	<button id="admin-button">Admin</button>
+	<div id="admin" class="hide">
+		<div class="input-wrap"><label for="name">Name:</label><input id="name" type="text" name="name"></div>
+		<div class="input-wrap"><label for="url">URL:</label><input id="url" type="text" name="url"></div>
+		<div class="input-wrap"><label for="clicks">Clicks:</label><input id="clicks" type="text" name="clicks"></div>
+		<button id="cancel" class="cancel">Cancel</button>
+		<button id="save" class="save">Save</button>
 	</div>
 </body>
 <script src="js/scripts.js"></script>

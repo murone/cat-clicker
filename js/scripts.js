@@ -1,111 +1,78 @@
-var model = {
-	init: function(){
-		if(!localStorage.cats){
-			localStorage.cats = JSON.stringify([
-				{
-					"name":"Jackson",
-					"clicks": 0
-				},
-				{
-					"name":"Ella",
-					"clicks": 0
-				},
-				{
-					"name":"Meowseph",
-					"clicks": 0
-				},
-				{
-					"name":"Oliver",
-					"clicks": 0
-				},
-				{
-					"name":"Princess",
-					"clicks": 0
-				},
-				{
-					"name":"Duchess",
-					"clicks": 0
-				}
-			]);
-			localStorage.selected = 0;
-		}
+var initialCats = [
+	{
+		"name":"Jackson",
+		"clickCount": 0,
+		"imgSrc":"img/jackson.jpg",
+		"nicknames": ['Jack', 'Jack Attack','Brudder', 'Flopper']
 	},
-	increment: function(sel){
-		var cats = JSON.parse(localStorage.cats);
-		++ cats[sel].clicks;
-		localStorage.cats = JSON.stringify(cats);
+	{
+		"name":"Ella",
+		"clickCount": 0,
+		"imgSrc":"img/ella.jpg",
+		"nicknames": ['Ellers', 'Babygirl', 'Princess', 'Seester']
 	},
-	getCats: function(){
-		return JSON.parse(localStorage.cats);
+	{
+		"name":"Meowseph",
+		"clickCount": 0,
+		"imgSrc":"img/meowseph.jpg",
+		"nicknames": ['Stalin', 'Hitler']
 	},
-	getSelected: function(){
-		return localStorage.selected;
+	{
+		"name":"Oliver",
+		"clickCount": 0,
+		"imgSrc":"img/oliver.jpg",
+		"nicknames": ['Oscar']
 	},
-	setSelected: function(sel){
-		localStorage.selected = sel;
+	{
+		"name":"Princess",
+		"clickCount": 0,
+		"imgSrc":"img/princess.jpg",
+		"nicknames": ['P']
+	},
+	{
+		"name":"Duchess",
+		"clickCount": 0,
+		"imgSrc":"img/duchess.jpg",
+		"nicknames": ['D']
 	}
+]
+
+var Cat = function(data){
+	this.clickCount = ko.observable(data.clickCount);
+	this.name = ko.observable(data.name);
+	this.imgSrc = ko.observable(data.imgSrc);
+	this.nicknames = ko.observableArray(data.nicknames);
+
+	this.title = ko.computed(function(){
+		var clicks = this.clickCount();
+		if (clicks < 10){return "Newborn"};
+        if (clicks < 20){return "Kitten"};
+        if (clicks < 30){return "Infant"};
+        if (clicks < 40){return "Child"};
+        if (clicks < 50){return "Teen"};
+        if (clicks < 60){return "Cat"};
+        if (clicks < 70){return "Ninja"};
+        return "Alien";
+	}, this);
 };
 
-var controller = {
-	changeSelected: function(newsel){
-		var oldsel = model.getSelected();
-		model.setSelected(newsel);
-		view.setActive(oldsel, newsel);
-		view.showCat(newsel, model.getCats());
-	},
-    init: function() {
-    	model.init();
-        var currentCats = model.getCats();
-        var sel = model.getSelected();
-        view.showList(sel, currentCats);
-        view.showCat(sel, currentCats);
-    },
-    increment: function(sel) {
-    	model.increment(sel);
-        var currentCats = model.getCats();
-        view.updateCat(currentCats[sel]);
-    }
-}
+var ViewModel = function() {
+	var self = this;
+	this.catList = ko.observableArray([]);
 
-var view = {
-	// init: function(sel, cats){
-	// 	view.showlist(cats);
-	// 	view.showCat(sel, cats);
-	// },
-	showList: function(selected, cats) {
-		var catList = document.getElementById('cat-list');
-		for (i=0; i<cats.length; ++i){
-			var thiscat = document.createElement("a");
-			thiscat.id = i;
-			thiscat.className = 'cat-item list-group-item';
-			// thiscat.href='#';
-			thiscat.onclick = function(){controller.changeSelected(this.id)};
-			thiscat.innerHTML = cats[i].name;
-			if (i==selected){thiscat.classList.add('active')};
-			catList.appendChild(thiscat);
-		};
-	},
-	showCat: function(sel, cats){
-		var content = document.getElementById('content')
-		var catDiv = document.getElementById('cat-div');
-		catDiv.innerHTML = '<img id="'+ cats[sel].name +'-pic" class="cat-pic" src="img/'+ cats[sel].name +'.jpg">'+
-			'<h2 id="'+ cats[sel].name +'-click-header" class="click-header">'+ cats[sel].name +' Clicks: </h2>'+
-			'<h2 id="'+ cats[sel].name +'-numclicks" class="num-header">'+ cats[sel].clicks +'</h2>';
-		content.appendChild(catDiv);
-		var elem = document.getElementById(cats[sel].name +'-pic');
-		elem.addEventListener('click', function(){
-			controller.increment(sel);
-		}, false);
-	},
-	updateCat: function(cat) {
-		document.getElementById(cat.name +'-numclicks').innerHTML = cat.clicks;
-	},
-	setActive: function(selected, newsel) {
-		document.getElementById(selected).classList.remove('active');
-		selected = newsel;
-		document.getElementById(selected).classList.add('active');
-		view.showCat(newsel, model.getCats());
-	}
+	initialCats.forEach(function(catItem){
+		self.catList.push(new Cat(catItem));
+	});
+
+	this.currentCat = ko.observable(this.catList()[0]);
+
+	this.incrementCounter = function() {
+		this.clickCount(this.clickCount() + 1);
+	} 
+	this.selectCat = function(cat) {
+		self.currentCat(cat);
+	} 
 };
 
-window.onload = controller.init();
+// window.onload = controller.init();
+ko.applyBindings(ViewModel);
